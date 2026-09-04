@@ -76,7 +76,7 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Dish Name</label>
-                            <input type="text" name="name" class="form-control bg-light" required placeholder="e.g. Truffle Cheese Burger">
+                            <input type="text" name="name" class="form-control bg-light" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Category</label>
@@ -91,7 +91,7 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Price (₹)</label>
-                            <input type="number" step="0.01" name="price" class="form-control bg-light" required placeholder="299.00">
+                            <input type="number" step="0.01" name="price" class="form-control bg-light" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Rating (1 to 5)</label>
@@ -101,7 +101,7 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Image URL</label>
-                        <input type="text" name="image" class="form-control bg-light" placeholder="https://images.unsplash.com/...">
+                        <input type="text" name="image" class="form-control bg-light">
                     </div>
 
                     <div class="mb-3">

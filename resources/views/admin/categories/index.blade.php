@@ -58,11 +58,11 @@
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Category Name</label>
-                        <input type="text" name="name" class="form-control bg-light" required placeholder="e.g. Burgers, Pizza">
+                        <input type="text" name="name" class="form-control bg-light" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Image URL</label>
-                        <input type="text" name="image" class="form-control bg-light" placeholder="https://images.unsplash.com/...">
+                        <input type="text" name="image" class="form-control bg-light">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Description</label>

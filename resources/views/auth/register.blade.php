@@ -26,27 +26,27 @@
                         @csrf
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Full Name</label>
-                            <input type="text" name="name" class="form-control bg-light" placeholder="e.g. Alex Johnson" required value="{{ old('name') }}">
+                            <input type="text" name="name" class="form-control bg-light" required value="{{ old('name') }}">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Email Address</label>
-                            <input type="email" name="email" class="form-control bg-light" placeholder="alex@example.com" required value="{{ old('email') }}">
+                            <input type="email" name="email" class="form-control bg-light" required value="{{ old('email') }}">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Phone Number</label>
-                            <input type="text" name="phone" class="form-control bg-light" placeholder="+91 9876543210" value="{{ old('phone') }}">
+                            <input type="text" name="phone" class="form-control bg-light" value="{{ old('phone') }}">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Delivery Address</label>
-                            <textarea name="address" class="form-control bg-light" rows="2" placeholder="House no, Street, Area">{{ old('address') }}</textarea>
+                            <textarea name="address" class="form-control bg-light" rows="2">{{ old('address') }}</textarea>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-semibold">Password</label>
-                            <input type="password" name="password" class="form-control bg-light" placeholder="Create a password" required>
+                            <input type="password" name="password" class="form-control bg-light" required>
                         </div>
 
                         <button type="submit" class="btn btn-zomato w-100 py-3 rounded-3 fw-bold fs-6">Create Account</button>

@@ -31,13 +31,11 @@ class OrderApiController extends Controller
         $deliveryFee = 40.00;
         $total = $subtotal + $tax + $deliveryFee;
 
-        // Auto-assign available delivery personnel
-        $dp = DeliveryPerson::where('status', 'available')->first();
-
+        // Delivery partner must be assigned manually by Admin (do not auto-assign)
         $order = Order::create([
             'order_number' => 'SNB-' . strtoupper(substr(uniqid(), -6)),
             'user_id' => $request->user_id,
-            'delivery_person_id' => $dp ? $dp->id : null,
+            'delivery_person_id' => null,
             'address_id' => $request->address_id ?: null,
             'subtotal' => $subtotal,
             'tax' => $tax,

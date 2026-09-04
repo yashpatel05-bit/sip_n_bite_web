@@ -122,7 +122,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Comments / Review</label>
-                                <textarea name="comment" class="form-control bg-light" rows="2" placeholder="Write your review here..."></textarea>
+                                <textarea name="comment" class="form-control bg-light" rows="2"></textarea>
                             </div>
                             <button type="submit" class="btn btn-zomato rounded-pill px-4 fw-bold">Submit Feedback</button>
                         </form>

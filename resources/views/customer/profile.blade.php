@@ -24,7 +24,7 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Phone Number</label>
-                        <input type="text" name="phone" class="form-control bg-light" value="{{ $user->phone }}" placeholder="+91 9876543210">
+                        <input type="text" name="phone" class="form-control bg-light" value="{{ $user->phone }}">
                     </div>
 
                     <div class="mb-3">
@@ -34,7 +34,7 @@
 
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Update Password (Optional)</label>
-                        <input type="password" name="password" class="form-control bg-light" placeholder="Leave blank to keep unchanged">
+                        <input type="password" name="password" class="form-control bg-light">
                     </div>
 
                     <button type="submit" class="btn btn-zomato rounded-pill px-4 fw-bold">Update Profile</button>

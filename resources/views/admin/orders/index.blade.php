@@ -50,11 +50,25 @@
                                 </span>
                             </td>
                             <td>
-                                <span class="small fw-semibold text-dark"><i class="fa-solid fa-user-ninja text-danger me-1"></i> {{ $ord->deliveryPerson ? $ord->deliveryPerson->name : 'Unassigned' }}</span>
+                                <form action="{{ route('admin.orders.update-status', $ord->id) }}" method="POST" id="dp_form_{{ $ord->id }}">
+                                    @csrf
+                                    <input type="hidden" name="order_status" value="{{ $ord->order_status }}">
+                                    <select name="delivery_person_id" class="form-select form-select-sm rounded-pill border-secondary" style="min-width: 140px;" onchange="this.form.submit()">
+                                        <option value="">Unassigned</option>
+                                        @foreach($deliveryPersons as $dp)
+                                            <option value="{{ $dp->id }}" {{ $ord->delivery_person_id == $dp->id ? 'selected' : '' }}>
+                                                {{ $dp->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </form>
                             </td>
                             <td class="pe-4 text-end">
                                 <form action="{{ route('admin.orders.update-status', $ord->id) }}" method="POST" class="d-inline-flex gap-1 align-items-center">
                                     @csrf
+                                    @if($ord->delivery_person_id)
+                                        <input type="hidden" name="delivery_person_id" value="{{ $ord->delivery_person_id }}">
+                                    @endif
                                     <select name="order_status" class="form-select form-select-sm rounded-pill" style="width: 130px;" onchange="this.form.submit()">
                                         <option value="Pending" {{ $ord->order_status == 'Pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="Preparing" {{ $ord->order_status == 'Preparing' ? 'selected' : '' }}>Preparing</option>
@@ -63,8 +77,8 @@
                                         <option value="Cancelled" {{ $ord->order_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
                                     </select>
                                 </form>
-                                <a href="{{ route('admin.orders.show', $ord->id) }}" class="btn btn-sm btn-light text-danger rounded-circle ms-1"><i class="fa-solid fa-eye"></i></a>
-                                <a href="{{ route('admin.invoices.show', $ord->id) }}" class="btn btn-sm btn-light text-dark rounded-circle" target="_blank"><i class="fa-solid fa-file-invoice"></i></a>
+                                <a href="{{ route('admin.orders.show', $ord->id) }}" class="btn btn-sm btn-light text-danger rounded-circle ms-1" title="View Details & Assign"><i class="fa-solid fa-eye"></i></a>
+                                <a href="{{ route('admin.invoices.show', $ord->id) }}" class="btn btn-sm btn-light text-dark rounded-circle" target="_blank" title="Invoice"><i class="fa-solid fa-file-invoice"></i></a>
                             </td>
                         </tr>
                     @endforeach

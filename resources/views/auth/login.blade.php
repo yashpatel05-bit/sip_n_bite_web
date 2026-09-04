@@ -28,7 +28,7 @@
                             <label class="form-label fw-semibold">Email Address</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-envelope text-secondary"></i></span>
-                                <input type="email" name="email" class="form-control bg-light border-start-0" placeholder="admin@sipnbite.com or your email" required value="{{ old('email') }}">
+                                <input type="email" name="email" class="form-control bg-light border-start-0" required value="{{ old('email') }}">
                             </div>
                         </div>
 
@@ -36,7 +36,7 @@
                             <label class="form-label fw-semibold">Password</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock text-secondary"></i></span>
-                                <input type="password" name="password" class="form-control bg-light border-start-0" placeholder="••••••••" required>
+                                <input type="password" name="password" class="form-control bg-light border-start-0" required>
                             </div>
                         </div>
 

@@ -62,19 +62,19 @@
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Full Name</label>
-                        <input type="text" name="name" class="form-control bg-light" required placeholder="e.g. Rahul Sharma">
+                        <input type="text" name="name" class="form-control bg-light" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Phone Number</label>
-                        <input type="text" name="phone" class="form-control bg-light" required placeholder="+91 9811223344">
+                        <input type="text" name="phone" class="form-control bg-light" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Email Address (Optional)</label>
-                        <input type="email" name="email" class="form-control bg-light" placeholder="rahul@sipnbite.com">
+                        <input type="email" name="email" class="form-control bg-light">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Vehicle Plate Number</label>
-                        <input type="text" name="vehicle_number" class="form-control bg-light" placeholder="DL 01 AB 1234">
+                        <input type="text" name="vehicle_number" class="form-control bg-light">
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">

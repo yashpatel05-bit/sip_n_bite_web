@@ -45,6 +45,10 @@ class CheckoutController extends Controller
             'payment_method' => 'required|in:COD,Razorpay',
         ]);
 
+        if ($request->payment_method === 'Razorpay' && empty($request->razorpay_payment_id)) {
+            return back()->with('error', 'Online payment failed or was cancelled. Please try paying again.');
+        }
+
         $subtotal = 0;
         foreach ($cart as $item) {
             $subtotal += $item['price'] * $item['quantity'];
@@ -53,13 +57,11 @@ class CheckoutController extends Controller
         $deliveryFee = 40;
         $total = $subtotal + $tax + $deliveryFee;
 
-        // Auto assign available delivery person if available
-        $dp = DeliveryPerson::where('status', 'available')->first();
-
+        // Delivery partner must be assigned manually by Admin (do not auto-assign)
         $order = Order::create([
             'order_number' => 'SNB-' . strtoupper(substr(uniqid(), -6)),
             'user_id' => Auth::id(),
-            'delivery_person_id' => $dp ? $dp->id : null,
+            'delivery_person_id' => null,
             'address_id' => $request->address_id,
             'subtotal' => $subtotal,
             'tax' => $tax,
@@ -87,7 +89,7 @@ class CheckoutController extends Controller
             Payment::create([
                 'order_id' => $order->id,
                 'user_id' => Auth::id(),
-                'razorpay_payment_id' => $request->razorpay_payment_id ?: 'rzp_test_' . uniqid(),
+                'razorpay_payment_id' => $request->razorpay_payment_id,
                 'razorpay_order_id' => $request->razorpay_order_id ?: 'order_' . uniqid(),
                 'amount' => $total,
                 'payment_method' => 'Razorpay',

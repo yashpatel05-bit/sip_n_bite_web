@@ -52,15 +52,19 @@
                         <input class="form-check-input" type="radio" name="payment_method" id="pay_razorpay" value="Razorpay">
                         <label class="form-check-label fw-bold cursor-pointer" for="pay_razorpay">
                             <i class="fa-solid fa-bolt text-warning me-2 fs-5"></i> Online Payment via Razorpay
-                            <p class="small text-secondary fw-normal mb-0">UPI, Cards, NetBanking (Key: rzp_test_SfUjeYusGWSZFg)</p>
+                            <p class="small text-secondary fw-normal mb-0">UPI, Cards, NetBanking (Key: {{ config('services.razorpay.key', 'rzp_test_TXveDStqLBJjaK') }})</p>
                         </label>
                     </div>
                 </div>
 
+                <!-- Hidden Razorpay Fields -->
+                <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+                <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+
                 <!-- Order Notes -->
                 <div class="card border-0 shadow-sm rounded-4 p-4">
                     <h5 class="fw-bold mb-2"><i class="fa-solid fa-note-sticky text-danger me-2"></i> Special Delivery Notes</h5>
-                    <textarea name="notes" class="form-control bg-light" rows="2" placeholder="e.g. Leave with security, Ring doorbell twice..."></textarea>
+                    <textarea name="notes" class="form-control bg-light" rows="2"></textarea>
                 </div>
             </div>
 
@@ -100,10 +104,58 @@
                         <span class="fw-bold fs-4 text-danger">₹{{ number_format($total, 2) }}</span>
                     </div>
 
-                    <button type="submit" class="btn btn-zomato w-100 py-3 rounded-3 fw-bold fs-6 mt-2">Place Order Now <i class="fa-solid fa-check-circle ms-2"></i></button>
+                    <button type="submit" id="btnPlaceOrder" class="btn btn-zomato w-100 py-3 rounded-3 fw-bold fs-6 mt-2">Place Order Now <i class="fa-solid fa-check-circle ms-2"></i></button>
                 </div>
             </div>
         </div>
     </form>
 </div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var checkoutForm = document.getElementById('checkoutForm');
+        
+        checkoutForm.addEventListener('submit', function(e) {
+            var selectedPayment = document.querySelector('input[name="payment_method"]:checked');
+            var paymentMethod = selectedPayment ? selectedPayment.value : 'COD';
+            
+            if (paymentMethod === 'Razorpay') {
+                var paymentId = document.getElementById('razorpay_payment_id').value;
+                if (!paymentId) {
+                    e.preventDefault();
+
+                    var options = {
+                        "key": "{{ config('services.razorpay.key', 'rzp_test_TXveDStqLBJjaK') }}",
+                        "amount": Math.round({{ $total }} * 100),
+                        "currency": "INR",
+                        "name": "Sip N Bite",
+                        "description": "Food Order Payment",
+                        "image": "https://cdn-icons-png.flaticon.com/512/3170/3170733.png",
+                        "handler": function (response) {
+                            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                            if (response.razorpay_order_id) {
+                                document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+                            }
+                            checkoutForm.submit();
+                        },
+                        "prefill": {
+                            "name": "{{ Auth::user()->name }}",
+                            "email": "{{ Auth::user()->email }}",
+                            "contact": "{{ Auth::user()->phone ?? '' }}"
+                        },
+                        "theme": {
+                            "color": "#dc3545"
+                        }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.on('payment.failed', function (response) {
+                        alert("Payment Failed: " + response.error.description);
+                    });
+                    rzp1.open();
+                }
+            }
+        });
+    });
+</script>
 @endsection

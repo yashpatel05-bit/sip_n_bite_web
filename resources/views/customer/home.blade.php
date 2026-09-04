@@ -14,7 +14,7 @@
             <div class="col-md-7">
                 <form action="{{ route('customer.menu') }}" method="GET" class="d-flex bg-white p-2 rounded-pill shadow-lg">
                     <span class="input-group-text bg-transparent border-0 text-secondary px-3"><i class="fa-solid fa-magnifying-glass text-danger fs-5"></i></span>
-                    <input type="text" name="search" class="form-control border-0 bg-transparent shadow-none fs-6" placeholder="Search for burgers, pizza, coffee, desserts...">
+                    <input type="text" name="search" class="form-control border-0 bg-transparent shadow-none fs-6">
                     <button type="submit" class="btn btn-zomato rounded-pill px-4">Search</button>
                 </form>
             </div>

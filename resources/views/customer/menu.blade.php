@@ -14,7 +14,7 @@
             <div class="col-md-8">
                 <form action="{{ route('customer.menu') }}" method="GET" class="row g-2">
                     <div class="col-md-6">
-                        <input type="text" name="search" class="form-control rounded-pill bg-light" placeholder="Search dish name..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control rounded-pill bg-light" value="{{ request('search') }}">
                     </div>
                     <div class="col-md-4">
                         <select name="category" class="form-select rounded-pill bg-light">

@@ -50,7 +50,7 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-semibold">Special Request / Occasion</label>
-                            <textarea name="special_request" class="form-control bg-light" rows="2" placeholder="Birthday decoration, high chair, window seat..."></textarea>
+                            <textarea name="special_request" class="form-control bg-light" rows="2"></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-zomato w-100 py-3 rounded-3 fw-bold fs-6">Confirm Table Reservation <i class="fa-solid fa-calendar-check ms-2"></i></button>
