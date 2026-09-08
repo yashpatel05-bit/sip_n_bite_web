@@ -37,7 +37,21 @@ class OrderController extends Controller
             'order_status' => 'required|in:Pending,Preparing,Out for Delivery,Delivered,Cancelled',
         ]);
 
-        $order->order_status = $request->order_status;
+        $currentStatus = $order->order_status;
+        $newStatus = $request->order_status;
+
+        // Prevent invalid backward status regressions
+        if (in_array($currentStatus, ['Delivered', 'Cancelled'])) {
+            return back()->with('error', "Order #{$order->order_number} is already {$currentStatus} and cannot be modified.");
+        }
+        if ($currentStatus === 'Preparing' && $newStatus === 'Pending') {
+            return back()->with('error', "Cannot revert order #{$order->order_number} back to Pending once Preparing.");
+        }
+        if ($currentStatus === 'Out for Delivery' && in_array($newStatus, ['Pending', 'Preparing'])) {
+            return back()->with('error', "Cannot revert order #{$order->order_number} back to {$newStatus} once Out for Delivery.");
+        }
+
+        $order->order_status = $newStatus;
         
         if ($request->has('delivery_person_id')) {
             $order->delivery_person_id = $request->delivery_person_id;
@@ -46,7 +60,7 @@ class OrderController extends Controller
             if ($request->delivery_person_id) {
                 $dp = DeliveryPerson::find($request->delivery_person_id);
                 if ($dp) {
-                    $dp->status = ($request->order_status === 'Delivered' || $request->order_status === 'Cancelled') 
+                    $dp->status = ($newStatus === 'Delivered' || $newStatus === 'Cancelled') 
                         ? 'available' 
                         : 'on_delivery';
                     $dp->save();
@@ -54,12 +68,12 @@ class OrderController extends Controller
             }
         }
 
-        if ($request->order_status === 'Delivered' && $order->payment_method === 'COD') {
+        if ($newStatus === 'Delivered' && $order->payment_method === 'COD') {
             $order->payment_status = 'paid';
         }
 
         $order->save();
 
-        return back()->with('success', 'Order status updated successfully!');
+        return back()->with('success', "Order #{$order->order_number} updated to {$newStatus}!");
     }
 }
