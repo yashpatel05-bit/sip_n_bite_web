@@ -223,6 +223,146 @@
         </div>
     </footer>
 
+    <!-- Floating AI Chatbot Widget -->
+    <div id="ai-chat-widget">
+        <button id="ai-chat-toggle" class="shadow-lg">
+            <i class="fa-solid fa-robot"></i>
+        </button>
+        <div id="ai-chat-box" class="shadow-lg rounded-4 overflow-hidden d-none">
+            <div class="chat-header bg-danger text-white p-3 d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-utensils me-2"></i> Sip N Bite AI</h6>
+                    <small class="opacity-75">Ask about our menu, offers & recommendations</small>
+                </div>
+                <button id="ai-chat-close" class="btn btn-sm text-white"><i class="fa-solid fa-xmark fs-5"></i></button>
+            </div>
+            <div id="ai-chat-body" class="p-3 bg-light" style="height: 300px; overflow-y: auto;">
+                <div class="chat-message bot mb-3">
+                    <div class="message-content bg-white p-2 px-3 rounded-3 shadow-sm d-inline-block border">
+                        Hello! 👋 I'm your Sip N Bite assistant. How can I help you today?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-footer p-2 bg-white border-top d-flex gap-2 align-items-center">
+                <input type="text" id="ai-chat-input" class="form-control rounded-pill bg-light border-0 px-3" placeholder="Type your message...">
+                <button id="ai-chat-send" class="btn btn-danger rounded-circle" style="width: 40px; height: 40px;"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #ai-chat-widget {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1050;
+        }
+        #ai-chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #ai-chat-toggle:hover {
+            transform: scale(1.1);
+        }
+        #ai-chat-box {
+            width: 350px;
+            background: white;
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .chat-message.user {
+            text-align: right;
+        }
+        .chat-message.user .message-content {
+            background-color: #ffeaea;
+            color: #d32f2f;
+            border-color: #ffcccc !important;
+        }
+        .message-content {
+            font-size: 14px;
+            max-width: 85%;
+        }
+        .typing-indicator {
+            font-style: italic;
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('ai-chat-toggle');
+            const closeBtn = document.getElementById('ai-chat-close');
+            const chatBox = document.getElementById('ai-chat-box');
+            const chatBody = document.getElementById('ai-chat-body');
+            const chatInput = document.getElementById('ai-chat-input');
+            const sendBtn = document.getElementById('ai-chat-send');
+
+            toggleBtn.addEventListener('click', () => chatBox.classList.toggle('d-none'));
+            closeBtn.addEventListener('click', () => chatBox.classList.add('d-none'));
+
+            const appendMessage = (sender, text) => {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `chat-message ${sender} mb-3`;
+                msgDiv.innerHTML = `<div class="message-content ${sender === 'user' ? 'bg-danger text-white' : 'bg-white text-dark'} p-2 px-3 rounded-3 shadow-sm d-inline-block border">${text}</div>`;
+                chatBody.appendChild(msgDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            };
+
+            const sendMessage = async () => {
+                const message = chatInput.value.trim();
+                if (!message) return;
+
+                appendMessage('user', message);
+                chatInput.value = '';
+
+                // Add typing indicator
+                const typingDiv = document.createElement('div');
+                typingDiv.className = `chat-message bot mb-3 typing`;
+                typingDiv.innerHTML = `<div class="typing-indicator p-2 px-3">Thinking...</div>`;
+                chatBody.appendChild(typingDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+                    
+                    const data = await response.json();
+                    chatBody.removeChild(typingDiv);
+                    
+                    if (data.success) {
+                        appendMessage('bot', data.reply);
+                    } else {
+                        appendMessage('bot', data.reply || 'Oops, something went wrong.');
+                    }
+                } catch (err) {
+                    chatBody.removeChild(typingDiv);
+                    appendMessage('bot', 'Network error. Please try again.');
+                }
+            };
+
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @yield('scripts')
 </body>

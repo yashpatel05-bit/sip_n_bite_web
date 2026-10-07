@@ -9,11 +9,16 @@ use App\Http\Controllers\Api\AddressApiController;
 use App\Http\Controllers\Api\FeedbackApiController;
 use App\Http\Controllers\Api\DistanceApiController;
 
+use App\Http\Controllers\ChatbotController;
+
 /*
 |--------------------------------------------------------------------------
 | RESTful API Routes for Android Mobile Application
 |--------------------------------------------------------------------------
 */
+
+// Chatbot API
+Route::post('/chat', [ChatbotController::class, 'chat']);
 
 // Auth APIs
 Route::post('/register', [AuthApiController::class, 'register']);
